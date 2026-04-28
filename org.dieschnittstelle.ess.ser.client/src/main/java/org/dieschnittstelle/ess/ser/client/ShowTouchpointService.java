@@ -9,6 +9,7 @@ import java.util.concurrent.Future;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
@@ -181,6 +182,25 @@ public class ShowTouchpointService {
 		createClient();
 
 		logger.debug("client running: {}",client.isRunning());
+
+		try{
+			HttpDelete request = new HttpDelete("http://localhost:8080/api/touchpoints/" + tp.getId());
+			// execute the request, which will return a Future<HttpResponse> object
+			Future<HttpResponse> responseFuture = client.execute(request, null);
+			// get the response from the Future object
+			HttpResponse response = responseFuture.get();
+			if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+				show("successfully deleted touchpoint: " + tp + " with id: " + tp.getId() + "");
+			}else if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND){
+				show("could not find touchpoint with id: " + tp.getId() + " to delete");
+			}else {
+				show("got unexpected status code: " + response.getStatusLine().getStatusCode() + " for delete request");
+			}
+
+		} catch (Exception e) {
+			logger.error("got exception: " + e, e);
+			throw new RuntimeException(e);
+		}
 
 	}
 

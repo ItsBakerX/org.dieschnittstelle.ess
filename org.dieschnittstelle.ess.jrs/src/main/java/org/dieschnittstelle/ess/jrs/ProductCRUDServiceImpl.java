@@ -2,14 +2,14 @@ package org.dieschnittstelle.ess.jrs;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Context;
+import org.apache.logging.log4j.Logger;
 import org.dieschnittstelle.ess.entities.GenericCRUDExecutor;
-import org.dieschnittstelle.ess.entities.crm.StationaryTouchpoint;
+import org.dieschnittstelle.ess.entities.erp.AbstractProduct;
 import org.dieschnittstelle.ess.entities.erp.IndividualisedProductItem;
 
 import java.util.List;
-
-import static com.ibm.java.diagnostics.utils.Context.logger;
 
 /*
  * TODO JRS2: implementieren Sie hier die im Interface deklarierten Methoden
@@ -17,10 +17,12 @@ import static com.ibm.java.diagnostics.utils.Context.logger;
 
 public class ProductCRUDServiceImpl implements IProductCRUDService {
 
+	protected static Logger logger = org.apache.logging.log4j.LogManager.getLogger(ProductCRUDServiceImpl.class);
+
 	/**
 	 * this accessor will be provided by the ServletContext, to which it is written by the TouchpointServletContextListener
 	 */
-	private GenericCRUDExecutor<StationaryTouchpoint> productCRUD;
+	private GenericCRUDExecutor<AbstractProduct> productCRUD;
 
 	/**
 	 * here we will be passed the context parameters by the resteasy framework. Alternatively @Context
@@ -32,41 +34,41 @@ public class ProductCRUDServiceImpl implements IProductCRUDService {
 	public ProductCRUDServiceImpl(@Context ServletContext servletContext, @Context HttpServletRequest request) {
 		logger.info("<constructor>: " + servletContext + "/" + request);
 		// read out the dataAccessor
-		this.productCRUD = (GenericCRUDExecutor<StationaryTouchpoint>) servletContext.getAttribute("touchpointCRUD");
-
-		logger.debug("read out the touchpointCRUD from the servlet context: " + this.touchpointCRUD);
+		this.productCRUD = (GenericCRUDExecutor<AbstractProduct>) servletContext.getAttribute("productCRUD");
+		logger.debug("read out the productCRUD from the servlet context: " + this.productCRUD);
 	}
 
 	@Override
 	public IndividualisedProductItem createProduct(
 			IndividualisedProductItem prod) {
-		// TODO Auto-generated method stub
-		return null;
+		return (IndividualisedProductItem) this.productCRUD.createObject(prod);
 	}
 
 	@Override
 	public List<IndividualisedProductItem> readAllProducts() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List) this.productCRUD.readAllObjects();
 	}
 
 	@Override
 	public IndividualisedProductItem updateProduct(long id,
 			IndividualisedProductItem update) {
-		// TODO Auto-generated method stub
-		return null;
+		update.setId(id);
+		return (IndividualisedProductItem) this.productCRUD.updateObject(update);
 	}
 
 	@Override
 	public boolean deleteProduct(long id) {
-		// TODO Auto-generated method stub
-		return false;
+			return this.productCRUD.deleteObject(id);
 	}
 
 	@Override
 	public IndividualisedProductItem readProduct(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		IndividualisedProductItem product = (IndividualisedProductItem) this.productCRUD.readObject(id);
+
+		if (product != null) {
+            return product;
+        } else {
+            throw new NotFoundException("The product with id " + id + " does not exist!");
+        }
 	}
-	
 }

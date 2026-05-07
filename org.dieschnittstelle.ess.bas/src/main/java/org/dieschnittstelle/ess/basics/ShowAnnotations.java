@@ -2,6 +2,7 @@ package org.dieschnittstelle.ess.basics;
 
 
 import org.dieschnittstelle.ess.basics.annotations.AnnotatedStockItemBuilder;
+import org.dieschnittstelle.ess.basics.annotations.DisplayAs;
 import org.dieschnittstelle.ess.basics.annotations.StockItemProxyImpl;
 import org.w3c.dom.NodeList;
 
@@ -55,7 +56,14 @@ public class ShowAnnotations {
 				//invoke returns the value of a field with the getter method
 				var value = getter.invoke(instance);
 				var attr = field.getName();
-
+				// TODO BAS3: if the new @DisplayAs annotation is present on a field,
+				//  the string representation will not use the field's name, but the name
+				//  specified in the the annotation. Regardless of @DisplayAs being present
+				//  or not, the field's value will be included in the string representation.
+				DisplayAs displayAs = field.getAnnotation(DisplayAs.class);
+				if (displayAs != null) {
+					attr = displayAs.value();
+				}
 				sb.append(attr).append(":").append(value).append(", ");
 
 			}
@@ -63,12 +71,6 @@ public class ShowAnnotations {
 			sb.setLength(sb.length()-2);
 			sb.append("}");
 			show(sb.toString());
-
-			// TODO BAS3: if the new @DisplayAs annotation is present on a field,
-			//  the string representation will not use the field's name, but the name
-			//  specified in the the annotation. Regardless of @DisplayAs being present
-			//  or not, the field's value will be included in the string representation.
-
 		}
 		catch (Exception e) {
 			e.printStackTrace();

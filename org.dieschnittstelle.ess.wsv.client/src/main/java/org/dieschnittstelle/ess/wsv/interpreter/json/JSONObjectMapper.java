@@ -214,13 +214,32 @@ public class JSONObjectMapper {
 				// check whether we have an abstract class that has jsontype
 				// info present
 				if (Modifier.isAbstract(((Class) type).getModifiers())) {
-					// TODO: include a handling for abstract classes considering
-					// the JsonTypeInfo annotation that might be set on type
-					throw new ObjectMappingException(
-							"cannot instantiate abstract class: " + type);
-				} else {
-					obj = ((Class) type).newInstance();
-				}
+                    // TODO: include a handling for abstract classes considering
+                    // the JsonTypeInfo annotation that might be set on type
+                    if (((Class) type).isAnnotationPresent(JsonTypeInfo.class)) {
+                        JsonTypeInfo typeInfo = (JsonTypeInfo) ((Class) type).getAnnotation(JsonTypeInfo.class);
+                        if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.CLASS
+                                && typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
+                            // read the concrete class name from the @class property in JSON
+                            JsonNode classNameNode = ((ObjectNode) json).get(typeInfo.property());
+                            if (classNameNode != null) {
+                                String concreteClassName = classNameNode.textValue();
+                                Class concreteClass = Class.forName(concreteClassName);
+                                obj = concreteClass.newInstance();
+								type = concreteClass;
+                            } else {
+                                throw new ObjectMappingException(
+                                        "JsonTypeInfo property '" + typeInfo.property() + "' not found in JSON for abstract class: " + type);
+                            }
+                        } else {
+                            throw new ObjectMappingException("cannot instantiate abstract class: " + type);
+                        }
+                    } else {
+                        throw new ObjectMappingException("cannot instantiate abstract class: " + type);
+                    }
+                } else {
+                    obj = ((Class) type).newInstance();
+                }
 
 				// iterate over the fields in the json object and invoke the
 				// corresponding setter on the instance

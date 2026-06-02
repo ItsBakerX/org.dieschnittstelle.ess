@@ -1,5 +1,9 @@
 package org.dieschnittstelle.ess.mip.components.erp.api;
 
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 import org.dieschnittstelle.ess.entities.erp.IndividualisedProductItem;
 
 import java.util.List;
@@ -11,6 +15,9 @@ import java.util.List;
  * - in the Bean implementation, delegate method invocations to the corresponding methods of the StockSystem Bean
  * - let the StockSystemClient in the client project access the web api via this interface - see ShoppingCartClient for an example
  */
+//@Path("/stock")
+//@Consumes(MediaType.APPLICATION_JSON)
+//@Produces(MediaType.APPLICATION_JSON)
 public interface StockSystemService {
 
 	/**
@@ -21,6 +28,7 @@ public interface StockSystemService {
 	/**
 	 * removes some units of a product from the stock of a point of sale
 	 */
+
     void removeFromStock(long productId, long pointOfSaleId, int units);
 
 	/**

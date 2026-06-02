@@ -13,46 +13,41 @@ public class ProductCRUDClient implements ProductCRUD {
 
 	public ProductCRUDClient() throws Exception {
 		// TODO: obtain a proxy specifying the service interface. Let all subsequent methods use the proxy.
-//		this.serviceProxy = ServiceProxyFactory.getInstance().getProxy(null);
+		this.serviceProxy = ServiceProxyFactory.getInstance().getProxy(ProductCRUD.class);
 	}
 
 	public AbstractProduct createProduct(AbstractProduct prod) {
 
 		// TODO: KOMMENTIEREN SIE DIE FOLGENDE ZUWEISUNG VON IDs UND DIE RETURN-ANWEISUNG AUS
-		prod.setId(Constants.nextId());
-		return prod;
+		//prod.setId(Constants.nextId());
+		//return prod;
 
 		// TODO: KOMMENTIEREN SIE DEN FOLGENDEN CODE, INKLUSIVE DER ID ZUWEISUNG, EIN
-//		AbstractProduct created = serviceProxy.createProduct(prod);
-//		// as a side-effect we set the id of the created product on the argument before returning
-//		prod.setId(created.getId());
-//		return created;
+		AbstractProduct created = serviceProxy.createProduct(prod);
+		// as a side-effect we set the id of the created product on the argument before returning
+		prod.setId(created.getId());
+		return created;
 	}
 
 	public List<AbstractProduct> readAllProducts() {
-//		return serviceProxy.readAllProducts();
-		return null;
+		return serviceProxy.readAllProducts();
 	}
 
 	public AbstractProduct updateProduct(AbstractProduct update) {
-//		return serviceProxy.updateProduct(update);
-		return null;
+		return serviceProxy.updateProduct(update);
 	}
 
 	public AbstractProduct readProduct(long productID) {
-//		return serviceProxy.readProduct(productID);
-		return null;
+		return serviceProxy.readProduct(productID);
 	}
 
 	public boolean deleteProduct(long productID) {
-//		return serviceProxy.deleteProduct(productID);
-		return false;
+		return serviceProxy.deleteProduct(productID);
 	}
 
 	@Override
 	public List<Campaign> getCampaignsForProduct(long productID) {
-//		return serviceProxy.getCampaignsForProduct(productID);
-		return null;
+		return serviceProxy.getCampaignsForProduct(productID);
 	}
 
 }

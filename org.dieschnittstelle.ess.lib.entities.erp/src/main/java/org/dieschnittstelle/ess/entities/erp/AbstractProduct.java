@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.apache.logging.log4j.Logger;
 import org.dieschnittstelle.ess.entities.GenericCRUDEntity;
 import org.dieschnittstelle.ess.utils.jsonb.JsonbJsonTypeInfoHandler;
@@ -27,6 +28,7 @@ import static org.dieschnittstelle.ess.utils.jsonb.JsonbJsonTypeInfoHandler.KLAS
 @JsonbTypeDeserializer(JsonbJsonTypeInfoHandler.class)
 @JsonbTypeSerializer(JsonbJsonTypeInfoHandler.class)
 @Entity
+@Table(name = "product")
 public abstract class AbstractProduct implements Serializable, GenericCRUDEntity {
 
 	protected static Logger logger = org.apache.logging.log4j.LogManager.getLogger(AbstractProduct.class);

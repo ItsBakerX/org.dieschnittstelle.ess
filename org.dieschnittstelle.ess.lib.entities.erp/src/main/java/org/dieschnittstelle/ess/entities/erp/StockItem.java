@@ -5,16 +5,21 @@ import jakarta.persistence.*;
 import org.apache.logging.log4j.Logger;
 
 @Table(name = "stock")
+@Entity
 public class StockItem {
 
 	protected static Logger logger = org.apache.logging.log4j.LogManager.getLogger(StockItem.class);
 
 	// internally, we use an own id, but do not expose it to the users of this class,
 	// which will access instances by constraints on pos and/or product
+	@Id
+	@GeneratedValue
 	private long id;
 
+	@ManyToOne
 	private PointOfSale pos;
 
+	@ManyToOne
 	private IndividualisedProductItem product;
 
 	private int price;

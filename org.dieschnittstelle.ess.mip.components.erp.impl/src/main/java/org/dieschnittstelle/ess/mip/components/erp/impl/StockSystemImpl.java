@@ -45,26 +45,39 @@ public class StockSystemImpl implements StockSystem {
     //TO DO: MIP+JPA4 Anforderungen 2
     @Override
     public List<IndividualisedProductItem> getProductsOnStock(long pointOfSaleId) {
-        return List.of();
+        PointOfSale pos = posCRUD.readPointOfSale(pointOfSaleId);
+            return stockItemCRUD.readStockItemsForPointOfSale(pos).stream()
+                    .map(StockItem::getProduct)
+                    .toList();
     }
 
     @Override
     public List<IndividualisedProductItem> getAllProductsOnStock() {
-        return List.of();
+        return posCRUD.readAllPointsOfSale().stream()
+                    .flatMap(pos -> stockItemCRUD.readStockItemsForPointOfSale(pos).stream())
+                    .map(StockItem::getProduct)
+                    .distinct()
+                    .toList();
     }
 
     @Override
     public int getUnitsOnStock(IndividualisedProductItem product, long pointOfSaleId) {
-        return 0;
+        PointOfSale pos = posCRUD.readPointOfSale(pointOfSaleId);
+            StockItem si = stockItemCRUD.readStockItem(product, pos);
+            return si != null ? si.getUnits() : 0;
     }
 
     @Override
     public int getTotalUnitsOnStock(IndividualisedProductItem product) {
-        return 0;
+        return stockItemCRUD.readStockItemsForProduct(product).stream()
+                    .mapToInt(StockItem::getUnits)
+                    .sum();
     }
 
     @Override
     public List<Long> getPointsOfSale(IndividualisedProductItem product) {
-        return List.of();
+        return stockItemCRUD.readStockItemsForProduct(product).stream()
+                    .map(si -> si.getPos().getId())
+                    .toList();
     }
 }

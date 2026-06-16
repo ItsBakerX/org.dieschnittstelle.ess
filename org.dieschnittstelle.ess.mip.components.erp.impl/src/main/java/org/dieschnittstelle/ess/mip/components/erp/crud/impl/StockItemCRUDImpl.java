@@ -48,11 +48,17 @@ public class StockItemCRUDImpl implements StockItemCRUD{
 
     @Override
     public List<StockItem> readStockItemsForProduct(IndividualisedProductItem prod) {
-        return List.of();
+        return em.createQuery(
+            "SELECT DISTINCT si FROM StockItem si WHERE si.product.id = :prodId", StockItem.class)
+            .setParameter("prodId", prod.getId())
+            .getResultList();
     }
 
     @Override
     public List<StockItem> readStockItemsForPointOfSale(PointOfSale pos) {
-        return List.of();
+        return em.createQuery(
+            "SELECT DISTINCT si FROM StockItem si WHERE si.pos.id = :posId", StockItem.class)
+            .setParameter("posId", pos.getId())
+            .getResultList();
     }
 }

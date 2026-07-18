@@ -47,9 +47,8 @@ public class TotalUsecase {
 	// TODO: ADD4: set to true for testing ShoppingException, set to false for testing success-case for transactions
 	private boolean provokeErrorOnPurchase = false /*true*/;
 
-	// TODO: PAT1: set to true for testing purchase service
 	// TODO: ADD4: set to true for testing success-case for transactions and ShoppingException
-	private boolean usePurchaseServiceClient = false /*true*/;
+	private boolean usePurchaseServiceClient = true;
 
 	// declare the attributes that will be instantiated with the service clients
 	private ProductCRUD productCRUD;

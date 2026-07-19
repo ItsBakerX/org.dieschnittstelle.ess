@@ -22,11 +22,11 @@ public class PurchaseServiceClient implements ShoppingBusinessDelegate {
 	private Customer customer;
 
 	public PurchaseServiceClient() {
-		purchaseServiceProxy = ServiceProxyFactory.getInstance().getProxy(PurchaseService.class);
+		this.purchaseServiceProxy = ServiceProxyFactory.getInstance().getProxy(PurchaseService.class);
 		try {
 			this.shoppingCartClient = new ShoppingCartClient();
 		} catch (Exception e) {
-            throw new RuntimeException("Got exception: " + e);
+            throw new RuntimeException("Got exception: " + e, e);
         }
     }
 
@@ -48,7 +48,7 @@ public class PurchaseServiceClient implements ShoppingBusinessDelegate {
 	@Override
 	public void purchase() throws ShoppingException {
 		this.purchaseServiceProxy.purchaseCartAtTouchpointForCustomer(new PurchaseService.PurchaseDTO(
-				shoppingCartClient.getShoppingCartEntityId(), touchpoint.getId(), customer.getId()
+				shoppingCartClient.getShoppingCartEntityId(), this.touchpoint.getId(), this.customer.getId()
 		));
 	}
 

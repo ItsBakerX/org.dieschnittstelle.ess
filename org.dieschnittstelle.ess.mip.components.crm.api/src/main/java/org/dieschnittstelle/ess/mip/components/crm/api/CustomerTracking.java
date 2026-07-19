@@ -7,7 +7,10 @@ import jakarta.ws.rs.core.MediaType;
 
 import org.dieschnittstelle.ess.entities.crm.Customer;
 import org.dieschnittstelle.ess.entities.crm.CustomerTransaction;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+// used cross-domain (by the shopping domain) -> request generation of a REST client
+@RegisterRestClient
 @Path("/tracking")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})

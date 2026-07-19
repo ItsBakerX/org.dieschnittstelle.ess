@@ -4,6 +4,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.dieschnittstelle.ess.entities.erp.IndividualisedProductItem;
 import org.dieschnittstelle.ess.mip.components.erp.api.dto.StockItemDTO;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ import java.util.List;
  * - in the Bean implementation, delegate method invocations to the corresponding methods of the StockSystem Bean
  * - let the StockSystemClient in the client project access the web api via this interface - see ShoppingCartClient for an example
  */
+// used cross-domain (by the shopping domain) -> request generation of a REST client
+@RegisterRestClient
 @Path("/stock")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

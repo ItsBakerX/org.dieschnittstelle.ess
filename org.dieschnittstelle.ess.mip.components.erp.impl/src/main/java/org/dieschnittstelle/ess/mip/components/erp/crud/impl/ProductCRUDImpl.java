@@ -1,7 +1,10 @@
 package org.dieschnittstelle.ess.mip.components.erp.crud.impl;
 
+import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Alternative;
 import jakarta.inject.Inject;
+import jakarta.interceptor.Interceptor;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -17,6 +20,13 @@ import java.util.List;
 @ApplicationScoped
 @Transactional
 @Logged
+/*
+ * in an all-in-one deployment the generated REST client for the interface conflicts
+ * with the local bean implementation. Hence the implementation is given precedence
+ * by marking it as a preferred @Alternative with a higher @Priority.
+ */
+@Alternative
+@Priority(Interceptor.Priority.APPLICATION+10)
 public class ProductCRUDImpl implements ProductCRUD {
 
     @Inject

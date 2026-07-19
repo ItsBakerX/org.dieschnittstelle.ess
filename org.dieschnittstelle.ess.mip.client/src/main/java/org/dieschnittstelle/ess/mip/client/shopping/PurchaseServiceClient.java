@@ -16,6 +16,13 @@ public class PurchaseServiceClient implements ShoppingBusinessDelegate {
 	protected static Logger logger = org.apache.logging.log4j.LogManager
 			.getLogger(PurchaseServiceClient.class);
 
+	/*
+TODO PAT1: use an appropriate proxy for the server-side purchase service
+Note that touchpoint and customer need to be stored locally
+before purchase() is invoked. For accessing shopping cart data use a local ShoppingCartClient
+in this case and access the shopping cart using the provided getter method
+*/
+
 	private PurchaseService purchaseServiceProxy;
 	private ShoppingCartClient shoppingCartClient;
 	private AbstractTouchpoint touchpoint;

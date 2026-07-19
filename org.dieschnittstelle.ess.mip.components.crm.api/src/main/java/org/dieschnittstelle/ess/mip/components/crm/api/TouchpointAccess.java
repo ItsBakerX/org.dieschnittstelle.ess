@@ -7,6 +7,10 @@ import org.dieschnittstelle.ess.entities.crm.AbstractTouchpoint;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+// used cross-domain (by the shopping domain) -> request generation of a REST client
+@RegisterRestClient
 @Path("/touchpoints")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON})
